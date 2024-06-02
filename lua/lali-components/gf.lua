@@ -41,6 +41,7 @@ local function component_picker_native(options)
   for _, option in ipairs(options) do
     choice_str = choice_str .. option .. "\n"
   end
+
   local choice = vim.fn.input(choice_str .. "Enter number: ")
   local index = tonumber(choice)
   if index and options[index] then
@@ -65,34 +66,8 @@ local function get_keymap_rhs(mode, lhs)
       return mapping.rhs
     end
   end
+
   return nil
-end
-
-local function get_component_type_and_name()
-  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local line = vim.api.nvim_get_current_line()
-  local start_word = line:sub(1, col + 1):match("()%w+$")
-
-  if not start_word then
-    print("No word found")
-    return
-  end
-
-  local start_select = line:sub(1, start_word - 1):match(".*()<")
-
-  if not start_select then
-    print("No < found")
-    return
-  end
-
-  local end_select = line:find("%s", col + 1)
-
-  if not end_select then
-    end_select = #line + 1
-  end
-
-  local selected_text = line:sub(start_select + 1, end_select - 1)
-  return selected_text
 end
 
 local function starts_with(str, prefix)
@@ -113,6 +88,46 @@ local function capitalize(name)
   end)
 end
 
+local function get_prefix(component_name, prefix_map)
+  local prefix
+
+  for key, _ in pairs(prefix_map) do
+    if starts_with(component_name, key) then
+      prefix = key
+      break
+    end
+  end
+
+  return prefix
+end
+
+local function get_component_type_and_name()
+  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+  local start_word = line:sub(1, col + 1):match("()[-%w]+$")
+
+  if not start_word then
+    print("No word found")
+    return
+  end
+
+  local start_select = line:sub(1, start_word - 1):match(".*()[<@]")
+
+  if not start_select then
+    print("No < found")
+    return
+  end
+
+  local end_select = line:find("%s", col + 1)
+
+  if not end_select then
+    end_select = #line + 1
+  end
+
+  local selected_text = line:sub(start_select + 1, end_select - 1)
+  return selected_text
+end
+
 local function laravel_component(component_name)
   return {
     "resources/views/components/" .. component_name .. ".blade.php",
@@ -120,7 +135,16 @@ local function laravel_component(component_name)
   }
 end
 
+local function laravel_view(component_name)
+  component_name = component_name:gsub("['()%)]", "")
+  return {
+    "resources/views/" .. component_name .. ".blade.php",
+    nil,
+  }
+end
+
 local function livewire_component(component_name)
+  component_name = component_name:gsub("['()%)]", "")
   return {
     "resources/views/livewire/" .. component_name .. ".blade.php",
     "app/Http/Livewire/" .. capitalize(component_name) .. ".php",
@@ -128,35 +152,42 @@ local function livewire_component(component_name)
 end
 
 local function get_paths(component_name)
-  local prefix
-
-  if starts_with(component_name, "x-") then
-    prefix = "x-"
-  end
-
-  if starts_with(component_name, "livewire:") then
-    prefix = "livewire:"
-  end
-
-  component_name = remove_prefix(component_name, prefix)
-
-  if prefix == "livewire:" then
-    return livewire_component(component_name)
-  end
-
-  if prefix == "x-" then
-    return laravel_component(component_name)
+  local prefix_map = {
+    ["extends("] = laravel_view,
+    ["include("] = laravel_view,
+    ["livewire("] = livewire_component,
+    ["livewire:"] = livewire_component,
+    ["x-"] = laravel_component,
+  }
+  local prefix = get_prefix(component_name, prefix_map)
+  if prefix then
+    component_name = remove_prefix(component_name, prefix)
+    return prefix_map[prefix](component_name)
   end
 end
 
 function M.gf()
+  if not vim.bo.filetype:find("blade", 1, true) then
+    return
+  end
+
   local component_name = get_component_type_and_name()
 
   if not component_name then
     return
   end
 
-  if not starts_with(component_name, "x-") and not starts_with(component_name, "livewire:") then
+  local prefix_map = {
+    ["extends("] = true,
+    ["include("] = true,
+    ["livewire("] = true,
+    ["livewire:"] = true,
+    ["x-"] = true,
+  }
+
+  local prefix = get_prefix(component_name, prefix_map)
+
+  if not prefix then
     return
   end
 
