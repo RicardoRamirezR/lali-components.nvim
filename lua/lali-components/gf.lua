@@ -63,7 +63,7 @@ local function get_keymap_rhs(mode, lhs)
   local mappings = vim.api.nvim_get_keymap(mode)
   for _, mapping in ipairs(mappings) do
     if mapping.lhs == lhs then
-      return mapping.rhs
+      return mapping.rhs:gsub("<[lL][tT]>", "<")
     end
   end
 
@@ -114,7 +114,6 @@ local function get_component_type_and_name()
   local start_select = line:sub(1, start_word - 1):match(".*()[<@]")
 
   if not start_select then
-    print("No < found")
     return
   end
 
@@ -166,15 +165,26 @@ local function get_paths(component_name)
   end
 end
 
-function M.gf()
+local function exec_native_gf(cfile)
+  if rhs then
+    rhs = rhs:gsub("<[cC][fF][iI][lL][eE]>", cfile)
+    rhs = rhs:gsub("<[cC][rR]>", "")
+    vim.cmd(rhs)
+  else
+    vim.fn.execute("normal! gf")
+  end
+end
+
+function M.gf(cfile)
   if not vim.bo.filetype:find("blade", 1, true) then
+    exec_native_gf(cfile)
     return
   end
 
   local component_name = get_component_type_and_name()
 
   if not component_name then
-    return
+    return exec_native_gf(cfile)
   end
 
   local prefix_map = {
@@ -188,7 +198,7 @@ function M.gf()
   local prefix = get_prefix(component_name, prefix_map)
 
   if not prefix then
-    return
+    return exec_native_gf(cfile)
   end
 
   component_name = string.gsub(component_name, "%.", "/")
@@ -214,11 +224,7 @@ function M.gf()
     return
   end
 
-  if rhs then
-    vim.cmd(rhs)
-  else
-    vim.fn.execute("normal! gf")
-  end
+  exec_native_gf()
 end
 
 M.setup = function()
@@ -231,7 +237,8 @@ M.setup = function()
   rhs = get_keymap_rhs("n", "gf")
 
   vim.keymap.set("n", "gf", function()
-    M.gf()
+    local cfile = vim.fn.expand("<cfile>")
+    M.gf(cfile)
   end, { noremap = true, silent = true })
 end
 
