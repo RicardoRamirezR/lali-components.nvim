@@ -1,5 +1,11 @@
 # Laravel / Livewire Components
 
+<p>
+    <a href="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.nvim">
+        <img src="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.vim/shield" />
+    </a>
+</p>
+
 ![lali](https://github.com/RicardoRamirezR/lali-components.nvim/assets/6526545/62b8227d-8b25-4bf7-b755-6b0d6c1a39f4)
 
 Using the **gf** command on a component name like ```<x-name```, ```@extends('name')```, ```@include('name')```, ```<livewire:name``` or ```@livewire('name')``` will open the component itself. If it has a class, you will need to choose which one to open.
