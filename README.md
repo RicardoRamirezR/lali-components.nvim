@@ -1,10 +1,11 @@
 # Laravel / Livewire Components
 
-<p>
+<p align="center">
     <a href="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.nvim">
         <img src="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.nvim/shield" />
     </a>
 </p>
+
 
 ![lali](https://github.com/RicardoRamirezR/lali-components.nvim/assets/6526545/62b8227d-8b25-4bf7-b755-6b0d6c1a39f4)
 
