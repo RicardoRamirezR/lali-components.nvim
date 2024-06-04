@@ -2,7 +2,7 @@
 
 <p>
     <a href="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.nvim">
-        <img src="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.vim/shield" />
+        <img src="https://dotfyle.com/plugins/RicardoRamirezR/lali-components.nvim/shield" />
     </a>
 </p>
 
