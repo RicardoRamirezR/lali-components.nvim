@@ -1,0 +1,108 @@
+==============================================================================
+Table of Contents                                    *lali-components.contents*
+
+INTRODUCTION                                            |lali-components-intro|
+FEATURES                                             |lali-components-features|
+  1. Navigating to Components with |gf|                    |lali-components-gf|
+  2. Autocompletion with `nvim-cmp`                       |lali-components-cmp|
+SETUP                                                   |lali-components-setup|
+USAGE                                                   |lali-components-usage|
+EXAMPLE                                               |lali-components-example|
+CONTRIBUTING                                     |lali-components-contributing|
+LICENSE                                               |lali-components-license|
+==============================================================================
+*Lali-Components.nvim*                                        *lali-components*
+
+Lali Components Plugin for Neovim
+
+
+==============================================================================
+INTRODUCTION                                            *lali-components-intro*
+
+This plugin provides easy navigation to Blade and Livewire components as well
+as autocompletion support using `nvim-cmp`.
+
+==============================================================================
+FEATURES                                             *lali-components-features*
+
+1. Navigating to Components with |gf|                      *lali-components-gf*
+
+   Using the |gf| command on certain component names in your code will open the
+   corresponding component file. This feature works with the following patterns:
+   - <x-name>
+   - @extends('name')
+   - @include('name')
+   - <livewire:name>
+   - @livewire('name')
+
+   If the component has an associated class, you will be prompted to choose
+   which one to open.
+
+2. Autocompletion with `nvim-cmp`                         *lali-components-cmp*
+
+   When using the Neovim completion plugin (`nvim-cmp`), suggestions for
+   relevant components will appear as you type the following prefixes:
+   - <x-
+   - @extends
+   - @include
+   - <live
+   - @livewire
+
+==============================================================================
+SETUP                                                   *lali-components-setup*
+
+To get started with `lali-components.nvim`, install the Plugin:
+
+   Add the plugin to your `init.lua` or `init.vim` file:
+
+Using packer
+use 'ricardoramirezr/lali-components.nvim'
+
+Using lazy
+{ 'ricardoramirezr/lali-components.nvim' }
+
+==============================================================================
+USAGE                                                   *lali-components-usage*
+
+1. Navigating to Components:
+
+   Place your cursor on the component name and press |gf|. If the component has
+   multiple classes, you will be prompted to choose which one to open.
+
+2. Autocompletion:
+
+   Start typing the component prefix (`<x-`, `@extends`, etc.) and `nvim-cmp`
+   will suggest the relevant components. Select from the suggestions to complete
+   your component names quickly.
+
+==============================================================================
+EXAMPLE                                               *lali-components-example*
+
+Here is an example to illustrate the usage of the plugin:
+
+> ```blade
+> <!-- Blade Template Example -->
+> <x-button>Click Me</x-button>
+>
+> @extends('layouts.app')
+>
+> @include('partials.header')
+>
+> <livewire:counter />
+> @livewire('counter')
+> ```
+
+In the example above, you can:
+- Place your cursor on `<x-button>`, `@extends('layouts.app')`, `@include('partials.header')`, `<livewire:counter />`, or `@livewire('counter')` and press |gf| to navigate to the respective component file.
+- Start typing `<x-`, `@extends`, `@include`, `<live`, or `@livewire` to get autocompletion suggestions from `nvim-cmp`.
+
+==============================================================================
+CONTRIBUTING                                     *lali-components-contributing*
+
+Contributions are welcome! Please submit issues and pull requests to the GitHub repository.
+
+==============================================================================
+LICENSE                                               *lali-components-license*
+
+This plugin is open-source and distributed under the MIT License.
+
