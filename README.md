@@ -38,13 +38,19 @@ To get started with `lali-components.nvim`, add the plugin to your `init.lua` or
 **Using packer**:
 
 ```lua
-use 'ricardoramirezr/lali-components.nvim'
+use {
+    'ricardoramirezr/lali-components.nvim',
+    ft = 'blade'
+}
 ```
     
 **Using lazy**:
 
 ```lua
-{ 'ricardoramirezr/lali-components.nvim' }
+{
+    'ricardoramirezr/lali-components.nvim',
+    ft = 'blade'
+}
 ```
 
 ## Usage
