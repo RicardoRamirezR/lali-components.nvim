@@ -1,3 +1,5 @@
+**There is a more comprehensive plugin, [blade-nav](https://github.com/RicardoRamirezR/blade-nav.nvim)** It opens views from controllers and routes for view(), View::make(), and Route::view(). Additionally, it can generate a component using an Artisan command as an option. Sorry for any inconvenience. Why not here? My OCD wins, since blade-nav is a superset of this plugin.
+
 # Laravel / Livewire Components
 
 <p align="center">
